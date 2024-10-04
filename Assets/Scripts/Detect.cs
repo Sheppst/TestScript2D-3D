@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class Detect : MonoBehaviour
 {
+    public float MaxVis = 10;
+
     [SerializeField] private Transform Target;
 
     private Transform Boundaries;
@@ -19,6 +21,7 @@ public class Detect : MonoBehaviour
     private Transform RightLimit;
 
     private bool IsDetect;
+    private int TurnVis = 1;
     // Start is called before the first frame update
     void Start()
     {
@@ -42,6 +45,7 @@ public class Detect : MonoBehaviour
                 TargRight = Boundaries.GetChild(3);
             }
         }
+
     }
 
     // Update is called once per frame
@@ -55,7 +59,13 @@ public class Detect : MonoBehaviour
 
     private bool RayDetectTarget()
     {
+        RaycastHit2D hit = Physics2D.Raycast(POV.position, Target.position);
         return false;
+    }
+
+    private float BoundRay()
+    {
+        return MaxVis;
     }
 
     public bool IsDetected()

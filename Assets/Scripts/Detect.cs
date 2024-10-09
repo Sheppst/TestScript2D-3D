@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class Detect : MonoBehaviour
 {
-    public float MaxVis = 10;
 
     [SerializeField] private Transform Target;
 
@@ -25,14 +24,7 @@ public class Detect : MonoBehaviour
         POV = transform.GetChild(0);
         TopLimit = POV.GetChild(0);
         BotLimit = POV.GetChild(1);
-
-        if (Target !=  null) 
-        {
-            Boundaries = Target.GetChild(0);
-            TargTop = Boundaries.GetChild(0);
-            TargBot = Boundaries.GetChild(1);
-        }
-
+        LimitDist = transform.GetChild(1);
     }
 
     // Update is called once per frame
@@ -46,13 +38,20 @@ public class Detect : MonoBehaviour
 
     private bool RayDetectTarget()
     {
-        Vector2 target = new Vector2(LimitDist.position.x, Target.position.y);
+        Vector2 target = new Vector2(LimitDist.position.x, BoundRay(Target.position.y));
         RaycastHit2D hit = Physics2D.Raycast(POV.position, target, Vector3.Distance(Target.position, POV.position));
+        Debug.DrawLine(POV.position, target, Color.red);
+        if (hit && hit.transform.tag == "Player")
+        {
+            Debug.DrawLine(POV.position, hit.point, Color.yellow);
+            return true;
+        }
         return false;
     }
 
-    private float BoundRay()
+    private float BoundRay(float y)
     {
+        float MaxVis = Mathf.Clamp(y, BotLimit.position.y, TopLimit.position.y);
         return MaxVis;
     }
 

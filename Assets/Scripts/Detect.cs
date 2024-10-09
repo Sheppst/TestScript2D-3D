@@ -11,14 +11,11 @@ public class Detect : MonoBehaviour
     private Transform Boundaries;
     private Transform TargTop;
     private Transform TargBot;
-    private Transform TargLeft;
-    private Transform TargRight;
 
     private Transform POV;
     private Transform TopLimit;
     private Transform BotLimit;
-    private Transform LeftLimit;
-    private Transform RightLimit;
+    private Transform LimitDist;
 
     private bool IsDetect;
     private int TurnVis = 1;
@@ -26,24 +23,14 @@ public class Detect : MonoBehaviour
     void Start()
     {
         POV = transform.GetChild(0);
-        TopLimit = POV?.GetChild(0);
-        BotLimit = POV?.GetChild(1);
-        if (POV.childCount == 4 )
-        {
-            LeftLimit = POV?.GetChild(2);
-            RightLimit = POV?.GetChild(3);
-        }
+        TopLimit = POV.GetChild(0);
+        BotLimit = POV.GetChild(1);
 
         if (Target !=  null) 
         {
             Boundaries = Target.GetChild(0);
             TargTop = Boundaries.GetChild(0);
             TargBot = Boundaries.GetChild(1);
-            if (Boundaries.childCount == 4 ) 
-            {
-                TargLeft = Boundaries.GetChild(2);
-                TargRight = Boundaries.GetChild(3);
-            }
         }
 
     }
@@ -59,7 +46,8 @@ public class Detect : MonoBehaviour
 
     private bool RayDetectTarget()
     {
-        RaycastHit2D hit = Physics2D.Raycast(POV.position, Target.position);
+        Vector2 target = new Vector2(LimitDist.position.x, Target.position.y);
+        RaycastHit2D hit = Physics2D.Raycast(POV.position, target, Vector3.Distance(Target.position, POV.position));
         return false;
     }
 

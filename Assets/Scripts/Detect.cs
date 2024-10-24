@@ -7,6 +7,7 @@ public class Detect : MonoBehaviour
 
     [SerializeField] private Transform Target;
     [SerializeField] private Transform DebugObj;
+    [SerializeField] private LayerMask DetectMask;
 
     private Transform Boundaries;
     private Transform TargTop;
@@ -40,9 +41,9 @@ public class Detect : MonoBehaviour
     private bool RayDetectTarget()
     {
         Vector2 target = new Vector2(Detectfollow(Target.position.x), BoundRay(Target.position.y));
-        RaycastHit2D hit = Physics2D.Raycast(POV.position, target, Vector3.Distance(target, POV.position));
+        RaycastHit2D hit = Physics2D.Raycast(POV.position, target, Vector3.Distance(target, POV.position), DetectMask);
         Debug.DrawLine(POV.position, target, Color.red);
-        if (hit && hit.transform.tag == "Player")
+        if (hit && hit.transform.CompareTag("Player"))
         {
             Debug.DrawLine(POV.position, hit.point, Color.yellow);
             return true;
@@ -55,7 +56,7 @@ public class Detect : MonoBehaviour
 
     private float BoundRay(float y)
     {
-        float MaxVis = 0;
+        float MaxVis = y;
         if (y > POV.position.y && !(CheckBound(Target.position.x, TopLimit.position) > Target.position.y))
         {
             MaxVis = CheckBound(Target.position.x, TopLimit.position);
@@ -64,7 +65,7 @@ public class Detect : MonoBehaviour
         {
             MaxVis = CheckBound(Target.position.x, BotLimit.position);
         }
-        MaxVis = Mathf.Clamp(y, BotLimit.position.y, TopLimit.position.y);
+        MaxVis = Mathf.Clamp(MaxVis, BotLimit.position.y, TopLimit.position.y);
         // MaxVis /= Vector2.Distance(POV.position, Target.position); // Pour créer une véritable sensation de cône de détection
         return MaxVis;
     }

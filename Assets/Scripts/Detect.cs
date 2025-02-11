@@ -73,8 +73,8 @@ public class Detect : MonoBehaviour
     private float CheckBound(float x, Vector3 Limit) // si erreur voire l'origine
     {
         //float y = (Limit.y - POV.position.y) / (Limit.x - POV.position.x) * (x - POV.position.x)  + POV.position.y;
-        Vector2 LimtRel = (Limit - POV.position);
-        float a = (LimtRel.y /LimtRel.x) * (x - POV.position.x) + POV.position.y;
+        Vector2 LimtRel = Limit - POV.position;
+        float a = LimtRel.y /LimtRel.x * (x - POV.position.x) + POV.position.y;
         DebugObj.position = new Vector2(x, a);
         return a;
     }
